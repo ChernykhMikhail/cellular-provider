@@ -14,5 +14,17 @@
     <artifactId>cellular-provider-client</artifactId>
     <packaging>jar</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>dev.chernykh</groupId>
+            <artifactId>cellular-provider-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>4.3.12.RELEASE</version>
+        </dependency>
+    </dependencies>
 
 </project>
