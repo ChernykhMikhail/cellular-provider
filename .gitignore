@@ -25,6 +25,9 @@ hs_err_pid*
 
 .idea/
 cellular-provider-api/target/
+cellular-provider-api/cellular-provider-api.iml
 cellular-provider-client/target/
+cellular-provider-client/cellular-provider-client.iml
 cellular-provider-shell/target/
+cellular-provider-shell/cellular-provider-shell.iml
 cellular-provider.iml
