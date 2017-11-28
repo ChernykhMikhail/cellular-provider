@@ -1,10 +1,9 @@
 package dev.chernykh.cellular.api.notice;
 
 import dev.chernykh.cellular.api.tariff.model.Tariff;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.validation.constraints.NotNull;
 
 @Service
 public class NoticeService implements NoticeTextGenerator {
@@ -17,7 +16,7 @@ public class NoticeService implements NoticeTextGenerator {
     }
 
     @Override
-    public String generateNotice(@NotNull Tariff tariff) {
+    public String generateNotice(@NonNull Tariff tariff) {
         return templateLoader.load(tariff);
     }
 }

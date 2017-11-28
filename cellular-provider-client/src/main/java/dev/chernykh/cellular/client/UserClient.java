@@ -1,6 +1,7 @@
 package dev.chernykh.cellular.client;
 
 import dev.chernykh.cellular.api.user.User;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -11,15 +12,16 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Component
-public class UserClient implements UserOperation {
+//@ConfigurationProperties("rest")
+public class UserClient implements UserOperations {
 
     private final RestTemplate restTemplate;
 
-    private String baseUrl = "http://localhost:8090";
+    private String url = "http://localhost:8090";
 
     public UserClient(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder
-                .rootUri(baseUrl)
+                .rootUri(url)
                 .build();
     }
 

@@ -1,0 +1,5 @@
+add-user 'User 1' 1
+add-user 'User 2' 2
+add-user 'User 3' 3
+add-user 'User 4' 2
+add-user 'User 5' 1

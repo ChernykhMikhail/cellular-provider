@@ -5,7 +5,7 @@ import dev.chernykh.cellular.api.user.User;
 
 import java.util.List;
 
-public interface UserOperation {
+public interface UserOperations {
 
     List<User> getUsers();
 }
