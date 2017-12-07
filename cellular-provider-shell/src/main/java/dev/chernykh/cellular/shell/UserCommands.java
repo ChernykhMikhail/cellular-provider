@@ -100,7 +100,7 @@ public class UserCommands {
     @ShellMethod("Remove user by specified id.")
     String removeUser(@ShellOption(help = "User id") long id) {
         return Optional.ofNullable(users.remove(id))
-                .map(user -> "Removed ser: " + user)
+                .map(user -> "Removed user: " + user)
                 .orElse("No user with id: " + id);
     }
 
