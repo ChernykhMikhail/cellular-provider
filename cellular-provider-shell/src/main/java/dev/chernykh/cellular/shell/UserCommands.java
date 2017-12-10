@@ -2,8 +2,10 @@ package dev.chernykh.cellular.shell;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import dev.chernykh.cellular.client.UserClient;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -27,6 +29,8 @@ import static java.util.stream.Collectors.joining;
 public class UserCommands {
 
     private static final int MAX_FULL_NAME_LENGTH = 255;
+    @Autowired
+    private UserClient client;
 
     private Map<Long, Map<String, Object>> users = new HashMap<>();
 
@@ -72,6 +76,12 @@ public class UserCommands {
                 .filter(user -> isApplyFilter ? expression.getValue(context, user, Boolean.class) : true)
                 .map(Object::toString)
                 .collect(joining("\n"));
+
+        result = client.getAll(null, 0)
+                .stream()
+                .map(Object::toString)
+                .collect(joining("\n"));
+
         return result.isEmpty() ? "No users." : result;
     }
 

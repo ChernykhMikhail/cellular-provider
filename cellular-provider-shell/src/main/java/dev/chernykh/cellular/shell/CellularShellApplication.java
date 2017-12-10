@@ -1,7 +1,9 @@
 package dev.chernykh.cellular.shell;
 
+import dev.chernykh.cellular.client.UserClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
@@ -15,10 +17,10 @@ public class CellularShellApplication {
         return new DefaultFormattingConversionService();
     }
 
-    /*@Bean
+    @Bean
     public UserClient userClient(RestTemplateBuilder restTemplateBuilder) {
         return new UserClient(restTemplateBuilder);
-    }*/
+    }
 
     /*@Bean
     public TariffClient tariffClient(RestTemplateBuilder restTemplateBuilder) {
