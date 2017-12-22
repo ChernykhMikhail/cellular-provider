@@ -26,6 +26,7 @@
             <artifactId>cellular-provider-client</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>

@@ -17,4 +17,6 @@ public interface TariffRepository extends JpaRepository<Tariff, Long> {
 
     @Query("select distinct t from Tariff t join fetch t.options o where o.dateOfChange between :fr and :to")
     List<Tariff> findByDateOfChangeBetween(@Param("fr") LocalDate fr, @Param("to") LocalDate to);
+
+    Tariff findByTariffName(String name);
 }

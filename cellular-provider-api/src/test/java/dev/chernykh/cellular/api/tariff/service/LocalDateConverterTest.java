@@ -6,33 +6,39 @@ import org.junit.Test;
 import java.sql.Date;
 import java.time.LocalDate;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class LocalDateConverterTest {
 
     private LocalDateConverter localDateConverter;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         localDateConverter = new LocalDateConverter();
     }
 
     @Test
-    public void convertToDatabaseColumn() throws Exception {
+    public void shouldConvertToDatabaseColumn() {
 
         Date expectedDate = localDateConverter.convertToDatabaseColumn(LocalDate.parse("2017-11-12"));
         Date actualDate = Date.valueOf("2017-11-12");
 
+        assertThat(expectedDate, notNullValue());
+        assertThat(actualDate, notNullValue());
         assertEquals(actualDate, expectedDate);
     }
 
     @Test
-    public void convertToEntityAttribute() throws Exception {
+    public void shouldConvertToEntityAttribute() {
 
         LocalDate expectedDate = localDateConverter.convertToEntityAttribute(Date.valueOf("2017-11-01"));
-        LocalDate currentDate = LocalDate.parse("2017-11-01");
+        LocalDate actualDate = LocalDate.parse("2017-11-01");
 
-        assertEquals(currentDate, expectedDate);
+        assertThat(expectedDate, notNullValue());
+        assertThat(actualDate, notNullValue());
+        assertEquals(actualDate, expectedDate);
     }
 
 }

@@ -1,16 +1,19 @@
 package dev.chernykh.cellular.api.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 
 /**
- * The rest controller to manage users.
+ * The rest controller to manage user resources.
  */
 @RestController
 @RequestMapping("/users")
@@ -24,9 +27,9 @@ public class UserController {
     }
 
     /**
-     * Retrieves all existing users.
+     * Return all existing users.
      *
-     * @return the list of users
+     * @return the list from users
      */
     @GetMapping
     public List<User> getUsers() {
@@ -34,63 +37,58 @@ public class UserController {
     }
 
     /**
-     * Retrieves the list of users with given tariff id.
+     * Get a tariff id and returns the list from users.
      *
      * @param tariffId the tariff id
-     * @return the list of found users
+     * @return the list from found users
      */
     @GetMapping(params = "tariffId")
     public List<User> getUsers(@RequestParam long tariffId) {
-        return userService.getAllByTariffId(tariffId);
+        return userService.getUsersByTariffId(tariffId);
     }
 
     /**
-     * Retrieves user by gotten id.
+     * Get a user id and returns the user if exists.
      *
      * @param id the user's id
-     * @return the http status OK
-     * @throws {@code UserNotFoundException} if user doesn't exist
+     * @return the found user
+     * @throws {@link UserNotFoundException} if user doesn't exist
      */
     @GetMapping("/{userId}")
     public ResponseEntity getUser(@PathVariable("userId") Long id) {
-        return userService.getById(id)
+        return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     /**
-     * Saves the gotten user.
+     * Get a user details to save as the new one.
      *
-     * @param user the user
-     * @return the http status OK
+     * @param user the user without id
+     * @return {@code HttpStatus.OK}
      */
     @PostMapping(consumes = APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity saveUser(@RequestBody User user) {
-        userService.saveUser(user);
-        return ResponseEntity.ok().build();
+    public ResponseEntity saveUser(User user) {
+        User savedUser = userService.saveUser(user);
+        return ResponseEntity
+                .created(UriComponentsBuilder.newInstance()
+                        .scheme("http")
+                        .host("localhost")
+                        .port(8090)
+                        .path("/users/" + savedUser.getId())
+                        .build().toUri())
+                .body(savedUser);
     }
 
     /**
-     * Updates the gotten user.
+     * Get a user id to delete user with this id.
      *
-     * @param user the user
-     * @return the http status CREATED
-     */
-    @PostMapping(path = "/{id}", consumes = APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity updateUser(@RequestBody User user) {
-        userService.saveUser(user);
-        return new ResponseEntity(HttpStatus.CREATED);
-    }
-
-    /**
-     * Deletes a user by the gotten id
-     *
-     * @param id an id
-     * @return the http status NO_CONTENT
+     * @param id the user id
+     * @return {@code HttpStatus.NO_CONTENT}
      */
     @DeleteMapping("/{userId}")
     public ResponseEntity removeUser(@PathVariable("userId") Long id) {
-        userService.deleteOne(id);
+        userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
 }

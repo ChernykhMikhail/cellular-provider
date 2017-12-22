@@ -1,11 +1,11 @@
 package dev.chernykh.cellular.shell;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import dev.chernykh.cellular.client.UserClient;
+import dev.chernykh.cellular.client.UserDto;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.expression.BeanExpressionContextAccessor;
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -17,7 +17,6 @@ import org.springframework.shell.standard.ShellOption;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static java.util.stream.Collectors.joining;
@@ -48,10 +47,12 @@ public class UserCommands {
             @ShellOption(help = "The full name.") @NotBlank @Length(max = MAX_FULL_NAME_LENGTH) String fullName,
             @ShellOption(help = "The id of a tariff used by the user.") long tariffId) {
 
-        long id = idGenerator.incrementAndGet();
+        /*long id = idGenerator.incrementAndGet();
 
         ImmutableMap<String, Object> user = ImmutableMap.of("id", id, "fullName", fullName, "tariffId", tariffId);
-        users.put(id, user);
+        users.put(id, user);*/
+
+        UserDto user = client.add(fullName, tariffId);
 
         return "New user added: " + user;
     }
@@ -79,6 +80,7 @@ public class UserCommands {
 
         result = client.getAll(null, 0)
                 .stream()
+                .filter(user -> isApplyFilter ? expression.getValue(context, user, Boolean.class) : true)
                 .map(Object::toString)
                 .collect(joining("\n"));
 
@@ -107,11 +109,13 @@ public class UserCommands {
      * @param id user id. Must not be empty
      * @return the command output
      */
-    @ShellMethod("Remove user by specified id.")
+    @ShellMethod("Remove a user by specified id.")
     String removeUser(@ShellOption(help = "User id") long id) {
-        return Optional.ofNullable(users.remove(id))
+        /*return Optional.ofNullable(users.remove(id))
                 .map(user -> "Removed user: " + user)
-                .orElse("No user with id: " + id);
+                .orElse("No user with id: " + id);*/
+        client.delete(id);
+        return "User with id " + id + " has been deleted";
     }
 
     /**
@@ -122,13 +126,13 @@ public class UserCommands {
      * @param tariffId new user's tariff. Must not be empty
      * @return the command output
      */
-    @ShellMethod("Make change to user details.")
+    @ShellMethod("Update a user with a specified id.")
     String updateUser(
             @ShellOption(help = "User id") long id,
             @ShellOption(help = "User full name") @NotBlank @Length(max = MAX_FULL_NAME_LENGTH) String name,
             @ShellOption(help = "User's tariff id") long tariffId) {
 
-        Map<String, Object> user = users.get(id);
+        /*Map<String, Object> user = users.get(id);
         if (user == null) {
             return "No user with id: " + id;
         }
@@ -137,8 +141,11 @@ public class UserCommands {
         updatedUser.replace("name", name);
         updatedUser.replace("tariffId", tariffId);
 
-        users.replace(id, ImmutableMap.copyOf(updatedUser));
+        users.replace(id, ImmutableMap.copyOf(updatedUser));*/
 
-        return "Updated user: " + updatedUser;
+        UserDto userDto = client.update(id, name, tariffId);
+
+        return "Updated user: " + userDto;
+//        return "Updated user: " + updatedUser;
     }
 }

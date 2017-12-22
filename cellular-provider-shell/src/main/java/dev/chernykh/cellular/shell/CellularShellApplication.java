@@ -1,5 +1,6 @@
 package dev.chernykh.cellular.shell;
 
+import dev.chernykh.cellular.client.TariffClient;
 import dev.chernykh.cellular.client.UserClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,10 +23,10 @@ public class CellularShellApplication {
         return new UserClient(restTemplateBuilder);
     }
 
-    /*@Bean
+    @Bean
     public TariffClient tariffClient(RestTemplateBuilder restTemplateBuilder) {
         return new TariffClient(restTemplateBuilder);
-    }*/
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(CellularShellApplication.class);

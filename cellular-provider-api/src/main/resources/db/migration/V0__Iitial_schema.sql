@@ -14,11 +14,9 @@ CREATE TABLE tariffs (
   ENGINE = InnoDB;
 
 CREATE TABLE users (
-  id          BIGINT      NOT NULL AUTO_INCREMENT,
-  first_name  VARCHAR(50) NOT NULL,
-  last_name   VARCHAR(50) NOT NULL,
-  middle_name VARCHAR(50),
-  tariff_id   BIGINT      NOT NULL,
+  id        BIGINT       NOT NULL AUTO_INCREMENT,
+  full_name VARCHAR(255) NOT NULL,
+  tariff_id BIGINT       NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT FK_TARIFF_ID FOREIGN KEY (tariff_id) REFERENCES tariffs (id)
 )
